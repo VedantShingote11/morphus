@@ -76,15 +76,20 @@ export default function BorrowerDashboard() {
 
     return (
         <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
-            <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '1rem 0' }}>
+            {/* Navigation Bar */}
+            <div className="navbar">
                 <div className="container flex justify-between items-center">
-                    <h2 style={{ margin: 0 }}>📊 Borrower Dashboard</h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700', background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            📊 Borrower Dashboard
+                        </h2>
+                    </div>
                     <div className="flex gap-2 items-center">
-                        <Link href="/borrower/voice-assistant" className="btn btn-secondary">
-                            🎤 Voice Assistant
+                        <Link href="/borrower/voice-assistant" className="btn btn-secondary" style={{ gap: '0.5rem' }}>
+                            <span>🎤</span> Voice Assistant
                         </Link>
-                        <Link href="/borrower/loans/new" className="btn btn-primary">
-                            + New Loan Request
+                        <Link href="/borrower/loans/new" className="btn btn-primary" style={{ gap: '0.5rem' }}>
+                            <span>+</span> New Loan Request
                         </Link>
                         <button onClick={handleLogout} className="btn btn-outline">
                             Logout
@@ -95,21 +100,39 @@ export default function BorrowerDashboard() {
 
             <div className="container" style={{ padding: '2rem 1rem' }}>
                 {/* Profile Summary */}
-                <div className="card mb-4">
-                    <div className="flex justify-between items-center">
+                <div className="card mb-4 fade-in" style={{ 
+                    background: 'var(--gradient-primary)', 
+                    color: 'white',
+                    border: 'none',
+                    padding: '2rem'
+                }}>
+                    <div className="flex justify-between items-center" style={{ flexWrap: 'wrap', gap: '1.5rem' }}>
                         <div>
-                            <h3 style={{ marginBottom: '0.5rem' }}>{profile?.user?.name}</h3>
-                            <p className="text-muted" style={{ fontSize: '0.875rem' }}>
+                            <div style={{ 
+                                display: 'inline-block',
+                                padding: '0.5rem 1rem',
+                                background: 'rgba(255, 255, 255, 0.2)',
+                                borderRadius: '50px',
+                                marginBottom: '1rem',
+                                fontSize: '0.75rem',
+                                fontWeight: '600'
+                            }}>
+                                👋 Welcome back
+                            </div>
+                            <h3 style={{ marginBottom: '0.5rem', fontSize: '1.75rem', color: 'white' }}>
+                                {profile?.user?.name || 'User'}
+                            </h3>
+                            <p style={{ fontSize: '0.9375rem', opacity: 0.9, marginBottom: '0.5rem' }}>
                                 {profile?.user?.email}
                             </p>
                             {profile?.aadhaarNumber && (
-                                <p className="text-muted" style={{ fontSize: '0.875rem' }}>
+                                <p style={{ fontSize: '0.875rem', opacity: 0.8 }}>
                                     Aadhaar: ****-****-{profile.aadhaarNumber.slice(-4)}
                                 </p>
                             )}
                         </div>
-                        <div style={{ textAlign: 'right' }}>
-                            <div className="mb-2">
+                        <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div>
                                 <StatusBadge status={profile?.kycStatus} />
                             </div>
                             <RiskScoreBadge score={profile?.riskScore || 50} />
@@ -119,15 +142,33 @@ export default function BorrowerDashboard() {
 
                 {/* KYC Warning */}
                 {profile?.kycStatus !== 'approved' && (
-                    <div className="card mb-4" style={{ background: 'var(--warning-bg)', border: '1px solid var(--warning)' }}>
-                        <div className="flex items-center gap-2">
-                            <span style={{ fontSize: '1.5rem' }}>⚠️</span>
-                            <div>
-                                <h4 style={{ marginBottom: '0.25rem', color: 'var(--warning)' }}>KYC Verification Required</h4>
-                                <p style={{ fontSize: '0.875rem', margin: 0 }}>
-                                    Complete your KYC to request loans.{' '}
-                                    <Link href="/borrower/profile" style={{ fontWeight: '600', color: 'var(--warning)' }}>
-                                        Submit KYC →
+                    <div className="card mb-4 fade-in" style={{ 
+                        background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', 
+                        border: '2px solid var(--warning)',
+                        padding: '1.5rem'
+                    }}>
+                        <div className="flex items-center gap-3">
+                            <div style={{ 
+                                fontSize: '2.5rem',
+                                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                            }}>⚠️</div>
+                            <div style={{ flex: 1 }}>
+                                <h4 style={{ 
+                                    marginBottom: '0.5rem', 
+                                    color: 'var(--warning)',
+                                    fontSize: '1.125rem',
+                                    fontWeight: '700'
+                                }}>
+                                    KYC Verification Required
+                                </h4>
+                                <p style={{ fontSize: '0.9375rem', margin: 0, color: 'var(--text-secondary)' }}>
+                                    Complete your KYC verification to start requesting loans.{' '}
+                                    <Link href="/borrower/profile" style={{ 
+                                        fontWeight: '700', 
+                                        color: 'var(--warning)',
+                                        textDecoration: 'underline'
+                                    }}>
+                                        Submit KYC Now →
                                     </Link>
                                 </p>
                             </div>
@@ -137,59 +178,98 @@ export default function BorrowerDashboard() {
 
                 {/* Stats Grid */}
                 <div className="grid grid-4 mb-4">
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Active Loans</p>
-                        <h2 style={{ margin: 0, color: 'var(--primary)' }}>{profile?.activeLoanCount || 0}</h2>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--primary)', animationDelay: '0.1s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Active Loans
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>📋</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--primary)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            {profile?.activeLoanCount || 0}
+                        </h2>
                     </div>
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Loans</p>
-                        <h2 style={{ margin: 0 }}>{profile?.totalLoansCount || 0}</h2>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--accent)', animationDelay: '0.2s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Total Loans
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>📊</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--accent)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            {profile?.totalLoansCount || 0}
+                        </h2>
                     </div>
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Borrowed</p>
-                        <h2 style={{ margin: 0, color: 'var(--secondary)' }}>₹{totalBorrowed.toLocaleString()}</h2>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--secondary)', animationDelay: '0.3s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Total Borrowed
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>💵</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--secondary)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            ₹{totalBorrowed.toLocaleString()}
+                        </h2>
                     </div>
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Repaid</p>
-                        <h2 style={{ margin: 0, color: 'var(--success)' }}>₹{totalRepaid.toLocaleString()}</h2>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--success)', animationDelay: '0.4s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Total Repaid
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>✅</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--success)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            ₹{totalRepaid.toLocaleString()}
+                        </h2>
                     </div>
                 </div>
 
                 {/* Active Loans */}
-                <div className="card">
+                <div className="card fade-in">
                     <div className="card-header">
                         <div className="flex justify-between items-center">
-                            <h3 className="card-title">Active Loans</h3>
+                            <h3 className="card-title" style={{ fontSize: '1.5rem', fontWeight: '700' }}>
+                                Active Loans
+                            </h3>
                             <Link href="/borrower/loans" className="btn btn-sm btn-outline">
-                                View All
+                                View All →
                             </Link>
                         </div>
                     </div>
 
                     {activeLoans.length === 0 ? (
-                        <p className="text-muted text-center" style={{ padding: '2rem' }}>
-                            No active loans. <Link href="/borrower/loans/new" style={{ color: 'var(--primary)' }}>Create a loan request</Link>
-                        </p>
+                        <div className="empty-state">
+                            <div className="empty-state-icon">📝</div>
+                            <h4 style={{ marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                                No Active Loans
+                            </h4>
+                            <p className="text-muted" style={{ marginBottom: '1.5rem' }}>
+                                Start your journey by creating your first loan request
+                            </p>
+                            <Link href="/borrower/loans/new" className="btn btn-primary">
+                                Create Loan Request
+                            </Link>
+                        </div>
                     ) : (
                         <div style={{ overflowX: 'auto' }}>
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th>Purpose</th>
-                                        <th>Amount</th>
-                                        <th>Duration</th>
-                                        <th>Interest Rate</th>
-                                        <th>Status</th>
-                                        <th>Funded By</th>
+                                        <th style={{ fontWeight: '700' }}>Purpose</th>
+                                        <th style={{ fontWeight: '700' }}>Amount</th>
+                                        <th style={{ fontWeight: '700' }}>Duration</th>
+                                        <th style={{ fontWeight: '700' }}>Interest Rate</th>
+                                        <th style={{ fontWeight: '700' }}>Status</th>
+                                        <th style={{ fontWeight: '700' }}>Funded By</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {activeLoans.map((loan) => (
-                                        <tr key={loan._id}>
-                                            <td>{loan.purpose}</td>
-                                            <td>₹{loan.amount.toLocaleString()}</td>
+                                    {activeLoans.map((loan, index) => (
+                                        <tr key={loan._id} className="fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                                            <td style={{ fontWeight: '600' }}>{loan.purpose}</td>
+                                            <td style={{ fontWeight: '700', color: 'var(--primary)' }}>₹{loan.amount.toLocaleString()}</td>
                                             <td>{loan.duration} months</td>
-                                            <td>{loan.interestRate}%</td>
+                                            <td style={{ fontWeight: '600' }}>{loan.interestRate}%</td>
                                             <td><StatusBadge status={loan.status} /></td>
                                             <td>{loan.fundedBy?.name || '-'}</td>
                                         </tr>

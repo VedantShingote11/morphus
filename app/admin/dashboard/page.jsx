@@ -67,9 +67,12 @@ export default function AdminDashboard() {
 
     return (
         <div style={{ minHeight: '100vh', background: 'var(--background)' }}>
-            <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: '1rem 0' }}>
+            {/* Navigation Bar */}
+            <div className="navbar">
                 <div className="container flex justify-between items-center">
-                    <h2 style={{ margin: 0 }}>⚙️ Admin Dashboard</h2>
+                    <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '700', background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        ⚙️ Admin Dashboard
+                    </h2>
                     <button onClick={handleLogout} className="btn btn-outline">
                         Logout
                     </button>
@@ -79,31 +82,59 @@ export default function AdminDashboard() {
             <div className="container" style={{ padding: '2rem 1rem' }}>
                 {/* Stats Grid */}
                 <div className="grid grid-4 mb-4">
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Users</p>
-                        <h2 style={{ margin: 0, color: 'var(--primary)' }}>{stats?.users?.length || 0}</h2>
-                        <p className="text-muted" style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>
-                            {borrowerCount} Borrowers | {lenderCount} Lenders
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--primary)', animationDelay: '0.1s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Total Users
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>👥</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--primary)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            {stats?.users?.length || 0}
+                        </h2>
+                        <p className="text-muted" style={{ fontSize: '0.75rem', marginTop: '0.5rem', fontWeight: '600' }}>
+                            {borrowerCount} Borrowers • {lenderCount} Lenders
                         </p>
                     </div>
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Pending KYC</p>
-                        <h2 style={{ margin: 0, color: 'var(--warning)' }}>{stats?.pendingKYC || 0}</h2>
-                        <Link href="/admin/kyc" style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--warning)', animationDelay: '0.2s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Pending KYC
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>⏳</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--warning)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            {stats?.pendingKYC || 0}
+                        </h2>
+                        <Link href="/admin/kyc" style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block', fontWeight: '600' }}>
                             Review KYC →
                         </Link>
                     </div>
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Total Loans</p>
-                        <h2 style={{ margin: 0, color: 'var(--secondary)' }}>{stats?.loans?.totalLoans || 0}</h2>
-                        <p className="text-muted" style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--secondary)', animationDelay: '0.3s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Total Loans
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>📋</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--secondary)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            {stats?.loans?.totalLoans || 0}
+                        </h2>
+                        <p className="text-muted" style={{ fontSize: '0.75rem', marginTop: '0.5rem', fontWeight: '600' }}>
                             ₹{stats?.loans?.totalAmount?.toLocaleString() || 0}
                         </p>
                     </div>
-                    <div className="card">
-                        <p className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '0.5rem' }}>Blockchain Blocks</p>
-                        <h2 style={{ margin: 0, color: 'var(--accent)' }}>{stats?.blockchain?.totalBlocks || 0}</h2>
-                        <Link href="/admin/blockchain" style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block' }}>
+                    <div className="stat-card fade-in" style={{ borderLeftColor: 'var(--accent)', animationDelay: '0.4s' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                            <p className="text-muted" style={{ fontSize: '0.875rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                Blockchain Blocks
+                            </p>
+                            <div style={{ fontSize: '1.5rem' }}>⛓️</div>
+                        </div>
+                        <h2 style={{ margin: 0, color: 'var(--accent)', fontSize: '2.5rem', fontWeight: '800' }}>
+                            {stats?.blockchain?.totalBlocks || 0}
+                        </h2>
+                        <Link href="/admin/blockchain" style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', display: 'block', fontWeight: '600' }}>
                             View Explorer →
                         </Link>
                     </div>
@@ -111,26 +142,47 @@ export default function AdminDashboard() {
 
                 {/* Quick Actions */}
                 <div className="grid grid-3 mb-4">
-                    <Link href="/admin/kyc" className="card" style={{ textAlign: 'center', padding: '2rem' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-                        <h4>KYC Management</h4>
-                        <p className="text-muted" style={{ fontSize: '0.875rem' }}>
+                    <Link href="/admin/kyc" className="card fade-in" style={{ 
+                        textAlign: 'center', 
+                        padding: '2.5rem',
+                        background: 'var(--gradient-primary)',
+                        color: 'white',
+                        border: 'none',
+                        animationDelay: '0.1s'
+                    }}>
+                        <div style={{ fontSize: '4rem', marginBottom: '1.5rem', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}>✅</div>
+                        <h4 style={{ color: 'white', marginBottom: '0.75rem', fontSize: '1.5rem', fontWeight: '700' }}>KYC Management</h4>
+                        <p style={{ fontSize: '0.9375rem', opacity: 0.9, lineHeight: '1.6' }}>
                             Approve or reject borrower KYC requests
                         </p>
                     </Link>
 
-                    <Link href="/admin/users" className="card" style={{ textAlign: 'center', padding: '2rem' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👥</div>
-                        <h4>User Management</h4>
-                        <p className="text-muted" style={{ fontSize: '0.875rem' }}>
+                    <Link href="/admin/users" className="card fade-in" style={{ 
+                        textAlign: 'center', 
+                        padding: '2.5rem',
+                        background: 'var(--gradient-success)',
+                        color: 'white',
+                        border: 'none',
+                        animationDelay: '0.2s'
+                    }}>
+                        <div style={{ fontSize: '4rem', marginBottom: '1.5rem', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}>👥</div>
+                        <h4 style={{ color: 'white', marginBottom: '0.75rem', fontSize: '1.5rem', fontWeight: '700' }}>User Management</h4>
+                        <p style={{ fontSize: '0.9375rem', opacity: 0.9, lineHeight: '1.6' }}>
                             View all users and their profiles
                         </p>
                     </Link>
 
-                    <Link href="/admin/blockchain" className="card" style={{ textAlign: 'center', padding: '2rem' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⛓️</div>
-                        <h4>Blockchain Explorer</h4>
-                        <p className="text-muted" style={{ fontSize: '0.875rem' }}>
+                    <Link href="/admin/blockchain" className="card fade-in" style={{ 
+                        textAlign: 'center', 
+                        padding: '2.5rem',
+                        background: 'var(--gradient-ocean)',
+                        color: 'white',
+                        border: 'none',
+                        animationDelay: '0.3s'
+                    }}>
+                        <div style={{ fontSize: '4rem', marginBottom: '1.5rem', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))' }}>⛓️</div>
+                        <h4 style={{ color: 'white', marginBottom: '0.75rem', fontSize: '1.5rem', fontWeight: '700' }}>Blockchain Explorer</h4>
+                        <p style={{ fontSize: '0.9375rem', opacity: 0.9, lineHeight: '1.6' }}>
                             View the complete transaction ledger
                         </p>
                     </Link>

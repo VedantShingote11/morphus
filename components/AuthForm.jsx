@@ -31,6 +31,14 @@ export default function AuthForm({ mode = 'login' }) {
                 body: JSON.stringify(formData),
             });
 
+            // Check if response is JSON
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await res.text();
+                console.error('Non-JSON response:', text);
+                throw new Error('Server error: Please check your database connection and try again.');
+            }
+
             const data = await res.json();
 
             if (!res.ok) {
@@ -57,15 +65,80 @@ export default function AuthForm({ mode = 'login' }) {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background)' }}>
-            <div className="card" style={{ width: '100%', maxWidth: '400px' }}>
-                <h2 className="text-center mb-3">
-                    {mode === 'login' ? 'Login' : 'Register'} as {formData.role.charAt(0).toUpperCase() + formData.role.slice(1)}
-                </h2>
+        <div style={{ 
+            minHeight: '100vh', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            background: 'var(--gradient-primary)',
+            position: 'relative',
+            overflow: 'hidden'
+        }}>
+            {/* Background decoration */}
+            <div style={{
+                position: 'absolute',
+                top: '-50%',
+                right: '-50%',
+                width: '200%',
+                height: '200%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                animation: 'spin 20s linear infinite'
+            }}></div>
+            
+            <div className="card fade-in" style={{ 
+                width: '100%', 
+                maxWidth: '450px',
+                position: 'relative',
+                zIndex: 1,
+                background: 'rgba(255, 255, 255, 0.98)',
+                backdropFilter: 'blur(10px)',
+                boxShadow: 'var(--shadow-2xl)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+            }}>
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <div style={{
+                        display: 'inline-block',
+                        padding: '0.75rem 1.5rem',
+                        background: 'var(--gradient-primary)',
+                        borderRadius: '50px',
+                        marginBottom: '1.5rem',
+                        color: 'white',
+                        fontWeight: '700',
+                        fontSize: '0.875rem'
+                    }}>
+                        {formData.role.charAt(0).toUpperCase() + formData.role.slice(1)} Portal
+                    </div>
+                    <h2 style={{ 
+                        fontSize: '2rem', 
+                        fontWeight: '800',
+                        marginBottom: '0.5rem',
+                        background: 'var(--gradient-primary)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}>
+                        {mode === 'login' ? 'Welcome Back' : 'Create Account'}
+                    </h2>
+                    <p className="text-muted" style={{ fontSize: '0.9375rem' }}>
+                        {mode === 'login' 
+                            ? 'Sign in to continue to your dashboard' 
+                            : 'Join our platform and start your journey'}
+                    </p>
+                </div>
 
                 {error && (
-                    <div className="badge badge-error" style={{ width: '100%', marginBottom: '1rem', padding: '0.75rem' }}>
-                        {error}
+                    <div className="badge badge-error fade-in" style={{ 
+                        width: '100%', 
+                        marginBottom: '1.5rem', 
+                        padding: '1rem',
+                        borderRadius: 'var(--radius-lg)',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        animation: 'pulse 2s infinite'
+                    }}>
+                        <span>⚠️</span> {error}
                     </div>
                 )}
 
@@ -121,8 +194,28 @@ export default function AuthForm({ mode = 'login' }) {
                         </div>
                     )}
 
-                    <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading}>
-                        {loading ? 'Please wait...' : mode === 'login' ? 'Login' : 'Register'}
+                    <button 
+                        type="submit" 
+                        className="btn btn-primary btn-lg" 
+                        style={{ 
+                            width: '100%',
+                            marginTop: '1rem',
+                            padding: '1rem',
+                            fontSize: '1rem',
+                            fontWeight: '700'
+                        }} 
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }}></span>
+                                Please wait...
+                            </>
+                        ) : (
+                            <>
+                                {mode === 'login' ? 'Sign In' : 'Create Account'} →
+                            </>
+                        )}
                     </button>
                 </form>
 

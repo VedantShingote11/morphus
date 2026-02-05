@@ -8,6 +8,14 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     try {
+        // Check if MongoDB URI is configured
+        if (!process.env.MONGODB_URI) {
+            return NextResponse.json(
+                { error: 'Database configuration error. Please check MONGODB_URI environment variable.' },
+                { status: 500 }
+            );
+        }
+
         await dbConnect();
 
         const { email, password, name, role } = await request.json();
@@ -86,8 +94,24 @@ export async function POST(request) {
 
     } catch (error) {
         console.error('Registration error:', error);
+        
+        // Handle specific error types
+        if (error.name === 'MongoServerError' || error.name === 'MongooseError') {
+            return NextResponse.json(
+                { error: 'Database connection failed. Please check your MongoDB connection.' },
+                { status: 500 }
+            );
+        }
+        
+        if (error.message && error.message.includes('MONGODB_URI')) {
+            return NextResponse.json(
+                { error: 'Database configuration error. Please check your environment variables.' },
+                { status: 500 }
+            );
+        }
+        
         return NextResponse.json(
-            { error: 'Registration failed. Please try again.' },
+            { error: error.message || 'Registration failed. Please try again.' },
             { status: 500 }
         );
     }
